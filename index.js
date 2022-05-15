@@ -69,7 +69,6 @@ let newArr = [];
 function tableGame(size) {
   for (i = 1; i <= size; i++) {
     elem = document.createElement("div");
-
     elem.className = "card hidden";
     elem.id = i;
     board.appendChild(elem);
@@ -133,23 +132,22 @@ function biggest() {
 function clickToStart() {
   let hide = document.getElementById("before");
   hide.classList.add("hidden");
+  cnt = 0;
   tableGame(boardSize);
 }
-function startAgain(){
-  board.innerHTML = ''
+function startAgain() {
+  board.innerHTML = "";
   let hide = document.getElementById("before");
   hide.classList.remove("hidden");
   board.classList.remove("twentyfive");
   board.classList.remove("sixteen");
   board.classList.remove("nine");
-  flagCnt = 0
-  cnt = 0
+  flagCnt = 0;
   players = [];
   startBtn.onclick = noClick;
-btn3.onclick = small;
-btn4.onclick = middle;
-btn5.onclick = biggest;
-  
+  btn3.onclick = small;
+  btn4.onclick = middle;
+  btn5.onclick = biggest;
 }
 
 //  // debugger
@@ -197,7 +195,7 @@ function check(symbol) {
         flagCnt++;
         if (flagCnt == size) {
           alert(`${symbol} win`);
-          startAgain()
+          startAgain();
           return;
         }
       } else {
@@ -214,7 +212,7 @@ function check(symbol) {
         flagCnt++;
         if (flagCnt == size) {
           alert(`${symbol} win`);
-          startAgain()
+          startAgain();
           return;
         }
       } else {
@@ -229,7 +227,7 @@ function check(symbol) {
       flagCnt++;
       if (flagCnt == size) {
         alert(`${symbol} win`);
-        startAgain()
+        startAgain();
         return;
       }
     } else {
@@ -243,7 +241,7 @@ function check(symbol) {
       flagCnt++;
       if (flagCnt == size) {
         alert(`${symbol} win`);
-        startAgain()
+        startAgain();
         return;
       }
     } else {
@@ -255,6 +253,6 @@ function check(symbol) {
   //No Winner
   if (cnt == size ** 2 - 1 && flagCnt != size) {
     alert("tako");
-    startAgain()
+    startAgain();
   }
 }
