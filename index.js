@@ -7,6 +7,8 @@ let elem;
 let cnt = 0;
 let players = [];
 let boardSize = 0;
+let flagCnt = 0;
+let size = 0;
 
 let newArr = [];
 // function check(symbol){
@@ -81,14 +83,14 @@ function click(e) {
     e.target.innerText = "X";
     players[e.target.id] = "X";
     e.target.onclick = noClick;
-    if (cnt >= 4) {
+    if (cnt >= size * 2 - 2) {
       check("X");
     }
   } else {
     e.target.innerText = "O";
     players[e.target.id] = "O";
     e.target.onclick = noClick;
-    if (cnt >= 4) {
+    if (cnt >= size * 2 - 2) {
       check("O");
     }
   }
@@ -96,53 +98,59 @@ function click(e) {
 }
 function noClick() {}
 
-startBtn.onclick = noClick
-btn3.onclick = small
-btn4.onclick = middle
-btn5.onclick = biggest
+startBtn.onclick = noClick;
+btn3.onclick = small;
+btn4.onclick = middle;
+btn5.onclick = biggest;
 
-function small(){
- 
-    board.classList.add('nine')
-    startBtn.onclick = clickToStart
-    btn4.onclick = noClick
-    btn5.onclick = noClick
-    boardSize = 9
+function small() {
+  board.classList.add("nine");
+  startBtn.onclick = clickToStart;
+  btn4.onclick = noClick;
+  btn5.onclick = noClick;
+  boardSize = 9;
+  size = 3;
+}
+
+function middle() {
+  board.classList.add("sixteen");
+  startBtn.onclick = clickToStart;
+  btn3.onclick = noClick;
+  btn5.onclick = noClick;
+  boardSize = 16;
+  size = 4;
+}
+
+function biggest() {
+  board.classList.add("twentyfive");
+  startBtn.onclick = clickToStart;
+  btn3.onclick = noClick;
+  btn4.onclick = noClick;
+  boardSize = 25;
+  size = 5;
+}
+
+function clickToStart() {
+  let hide = document.getElementById("before");
+  hide.classList.add("hidden");
+  tableGame(boardSize);
+}
+function startAgain(){
+  board.innerHTML = ''
+  let hide = document.getElementById("before");
+  hide.classList.remove("hidden");
+  board.classList.remove("twentyfive");
+  board.classList.remove("sixteen");
+  board.classList.remove("nine");
+  flagCnt = 0
+  cnt = 0
+  players = [];
+  startBtn.onclick = noClick;
+btn3.onclick = small;
+btn4.onclick = middle;
+btn5.onclick = biggest;
   
 }
-
-function middle(){
- 
-    board.classList.add('sixteen')
-    startBtn.onclick = clickToStart
-    btn3.onclick = noClick
-    btn5.onclick = noClick
-    boardSize = 16
-  
-}
-
-function biggest(){
-  
-    board.classList.add('twentyfive')
-    startBtn.onclick = clickToStart
-    btn3.onclick = noClick
-    btn4.onclick = noClick
-    boardSize = 25
- 
-}
-
-
-
-function clickToStart(){
- let hide = document.getElementById('before')
- hide.classList.add('hidden')
-  tableGame(boardSize)
-}
-
-
-
-
-
 
 //  // debugger
 //  let flag = false
@@ -182,32 +190,71 @@ function clickToStart(){
 //      }
 
 function check(symbol) {
-  for (i = 1; i <= 9; i += 3) {
-    if (
-      players[i] == symbol &&
-      players[i + 1] == symbol &&
-      players[i + 2] == symbol
-    ) {
-      alert(`${symbol} win`);
-    }
-  }
-  for (i = 1; i <= 3; i++) {
-    if (
-      players[i] == symbol &&
-      players[i + 3] == symbol &&
-      players[i + 6] == symbol
-    ) {
-      alert(`${symbol} win`);
+  //Check Collumns
+  for (j = 1; j <= size; j++) {
+    for (i = j; i <= size ** 2; i += size) {
+      if (players[i] == symbol) {
+        flagCnt++;
+        if (flagCnt == size) {
+          alert(`${symbol} win`);
+          startAgain()
+          return;
+        }
+      } else {
+        flagCnt = 0;
+        break;
+      }
     }
   }
 
-  if (players[1] == symbol && players[5] == symbol && players[9] == symbol) {
-    alert(`${symbol} win`);
+  //Check Lines
+  for (j = 1, x = 1; j <= size ** 2; j += size, x++) {
+    for (i = j; i <= size * x; i++) {
+      if (players[i] == symbol) {
+        flagCnt++;
+        if (flagCnt == size) {
+          alert(`${symbol} win`);
+          startAgain()
+          return;
+        }
+      } else {
+        flagCnt = 0;
+        break;
+      }
+    }
   }
-  if (players[3] == symbol && players[5] == symbol && players[7] == symbol) {
-    alert(`${symbol} win`);
+  //Check \
+  for (i = 1; i <= size ** 2; i += size + 1) {
+    if (players[i] == symbol) {
+      flagCnt++;
+      if (flagCnt == size) {
+        alert(`${symbol} win`);
+        startAgain()
+        return;
+      }
+    } else {
+      flagCnt = 0;
+      break;
+    }
   }
-  if (cnt == 8) {
+  //Check /
+  for (i = size; i < size ** 2; i += size - 1) {
+    if (players[i] == symbol) {
+      flagCnt++;
+      if (flagCnt == size) {
+        alert(`${symbol} win`);
+        startAgain()
+        return;
+      }
+    } else {
+      flagCnt = 0;
+      break;
+    }
+  }
+
+  //No Winner
+  if (cnt == size ** 2 - 1 && flagCnt != size) {
     alert("tako");
+    startAgain()
   }
 }
