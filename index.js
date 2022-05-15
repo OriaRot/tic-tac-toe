@@ -3,6 +3,8 @@ const startBtn = document.getElementById("btn");
 const btn3 = document.getElementById("btn3");
 const btn4 = document.getElementById("btn4");
 const btn5 = document.getElementById("btn5");
+const playerX = document.getElementById('ipt')
+const playerO = document.getElementById('ipt2')
 let elem;
 let cnt = 0;
 let players = [];
@@ -83,14 +85,14 @@ function click(e) {
     players[e.target.id] = "X";
     e.target.onclick = noClick;
     if (cnt >= size * 2 - 2) {
-      check("X");
+      check("X",playerX);
     }
   } else {
     e.target.innerText = "O";
     players[e.target.id] = "O";
     e.target.onclick = noClick;
     if (cnt >= size * 2 - 2) {
-      check("O");
+      check("O",playerO);
     }
   }
   cnt++;
@@ -187,14 +189,14 @@ function startAgain() {
 //          alert(`${symbol} win`);
 //      }
 
-function check(symbol) {
+function check(symbol,name) {
   //Check Collumns
   for (j = 1; j <= size; j++) {
     for (i = j; i <= size ** 2; i += size) {
       if (players[i] == symbol) {
         flagCnt++;
         if (flagCnt == size) {
-          alert(`${symbol} win`);
+          alert(`${name.value} win`);
           startAgain();
           return;
         }
@@ -211,7 +213,7 @@ function check(symbol) {
       if (players[i] == symbol) {
         flagCnt++;
         if (flagCnt == size) {
-          alert(`${symbol} win`);
+          alert(`${name.value} win`);
           startAgain();
           return;
         }
@@ -226,7 +228,7 @@ function check(symbol) {
     if (players[i] == symbol) {
       flagCnt++;
       if (flagCnt == size) {
-        alert(`${symbol} win`);
+        alert(`${name.value} win`);
         startAgain();
         return;
       }
@@ -240,7 +242,7 @@ function check(symbol) {
     if (players[i] == symbol) {
       flagCnt++;
       if (flagCnt == size) {
-        alert(`${symbol} win`);
+        alert(`${name.value} win`);
         startAgain();
         return;
       }
