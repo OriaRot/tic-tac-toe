@@ -1,204 +1,241 @@
-const board = document.getElementById("board");
-const startBtn = document.getElementById("btn");
-const btn3 = document.getElementById("btn3");
-const btn4 = document.getElementById("btn4");
-const btn5 = document.getElementById("btn5");
-const playerX = document.getElementById('ipt')
-const playerO = document.getElementById('ipt2')
+const board01 = document.getElementById("board01");
+const $ipt1 = document.getElementById("ipt1");
+const $ipt2 = document.getElementById("ipt2");
+const $startGame = document.getElementById("startGame");
+const $saveGame = document.getElementById("saveGame");
+const $loadGame = document.getElementById("loadGame");
+const $p1Name = document.getElementById("p1Name");
+const $p2Name = document.getElementById("p2Name");
+const $undoPlay = document.getElementById("undoPlay");
+const $timer = document.getElementById("timer");
+const $newGame = document.getElementById("newGame");
+const $stopGame = document.getElementById("stopGame");
+const $clearPlayers = document.getElementById("clearPlayers");
+const $recordTime = document.getElementById("recordTime");
+const $recordCnt = document.getElementById("recordCnt");
+const $bs3 = document.getElementById("bs3");
+const $bs4 = document.getElementById("bs4");
+const $bs5 = document.getElementById("bs5");
+
+let boardSize;
 let elem;
 let cnt = 0;
 let players = [];
-let boardSize = 0;
 let flagCnt = 0;
-let size = 0;
+let undo = [];
+let stopTimer = "stop";
+let timerArray = [];
+let pointsX = 0;
+let pointsO = 0;
+let Timescore = [];
+let movesScore = [];
 
-let newArr = [];
-// function check(symbol){
-// // for(i=1; i<=9; i++){//בדיקה מאוזן
-// //     if(players[i]==symbol){
-// //         newArr.push(symbol);
-// //     }
-//     // else{
-//     //     newArr = [];
-//     // }
-//     // if(newArr.length==3){
-//     //     alert(`${symbol} win`)
-//     // }
-// // }
-//  newArr = [];
-// for(i=1;i<=9;i++){// בדיקה מאונך
-//     if(players[i]==symbol){
-//         newArr.push(symbol);
-//         i+=Math.sqrt(9)-1
-//     }
-//     else{
-//         newArr = [];
+tableGame();
 
-//     }
-//     if(newArr.length==3){
-//         alert(`${symbol} win`)
-//     }
-// }
-// newArr=[];
-// for(i=1;i<=9;i++){//בדיקה אלכסון חיובי
-//     if(players[i]==symbol){
-//         newArr.push(symbol);
-//         i+=Math.sqrt(9)
-//     }
-//     else{
-//         newArr = [];
+$startGame.addEventListener("click", startGame);
+$undoPlay.addEventListener("click", undoPlay);
+$saveGame.addEventListener("click", saveGame);
+$loadGame.addEventListener("click", loadGame);
+$newGame.addEventListener("click", newGame);
+$stopGame.addEventListener("click", stopGame);
+$clearPlayers.addEventListener("click", clearPlayers);
 
-//     }
-//     if(newArr.length==3){
-//         alert(`${symbol} win`)
-//     }
-// }
-// newArr=[];
-// for(i=1;i<=9;i++){//בדיקה אלכסון שלילי
-//     if(players[i]==symbol){
-//         newArr.push(symbol);
-//         i+=Math.sqrt(9)-2
-//     }
-//     else{
-//         newArr = [];
-//     }
-//     if(newArr.length==3){
-//         alert(`${symbol} win`)
-//     }
-// }
-// }
+function boardSizeFun(e) {
+  boardSize = Number(e.value);
+  cnt = 0;
+  clearBoard();
+  stopTimer = "stop";
+  clock();
+  mls = 0;
+  sec = 0;
+  min = 0;
+  $timer.innerText = `0${min}:0${sec}:0${mls}`;
+}
 
-function tableGame(size) {
-  for (i = 1; i <= size; i++) {
+function clearPlayers() {
+  pointsO = 0;
+  pointsX = 0;
+  $p1Name.innerText = `Player 1 : ${pointsX}`;
+  $p2Name.innerText = `Player 2 : ${pointsO}`;
+}
+
+//Clear Board
+function clearBoard() {
+  let divBoard = document.querySelectorAll(".board");
+  for (i = 0; (div00 = divBoard[i]); i++) {
+    div00.parentNode.removeChild(div00);
+  }
+}
+
+function startGame() {
+  if (!$bs3.checked && !$bs4.checked && !$bs5.checked) {
+    console.log(`you didnt choose board size`);
+    return;
+  }
+  if ($ipt1.value == "") {
+    $p1Name.innerText = `Player 1 : ${pointsX}`;
+  } else {
+    $p1Name.innerText = `${$ipt1.value} : ${pointsX}`;
+  }
+  if ($ipt2.value == "") {
+    $p2Name.innerText = `Player 2 : ${pointsO}`;
+  } else {
+    $p2Name.innerText = `${$ipt2.value} : ${pointsO}`;
+  }
+  $p1Name.classList.add("border");
+  $p2Name.classList.remove("border");
+  clearBoard();
+  setToZero();
+}
+
+function newGame() {
+  if (!$bs3.checked && !$bs4.checked && !$bs5.checked) {
+    console.log(`you didnt choose board size`);
+    return;
+  }
+  let divBoard = document.querySelectorAll(".board");
+  for (i = 0; (div00 = divBoard[i]); i++) {
+    div00.parentNode.removeChild(div00);
+  }
+  setToZero();
+}
+
+function setToZero() {
+  tableGame(boardSize);
+  players = [];
+  undo = [];
+  cnt = 0;
+  stopTimer = "run";
+  mls = 0;
+  sec = 0;
+  min = 0;
+  flagCnt = 0;
+  clock();
+}
+
+function stopGame() {
+  stopTimer = "stop";
+  clock();
+}
+
+function undoPlay() {
+  cnt--;
+  if (cnt < 0) {
+    cnt = 0;
+  }
+  document.getElementById(undo[undo.length - 1]).innerText = " ";
+  document.getElementById(undo[undo.length - 1]).className = "card hidden";
+  document.getElementById(undo[undo.length - 1]).onclick = click;
+  undo.pop();
+}
+
+function saveGame() {
+  if (saveArray.length == 0) {
+    saveArray.push(...players);
+  }
+  saveArray[0] = cnt;
+  for (i in players) {
+    if (players != undefined) {
+      saveArray[i] = players[i];
+    }
+  }
+  saveArray[boardSize ** 2 + 1] = boardSize;
+  timerArray[0] = min;
+  timerArray[1] = sec;
+  timerArray[2] = mls;
+  stopTimer = "stop";
+}
+
+function loadGame() {
+  cnt = saveArray[0];
+  let divBoard = document.querySelectorAll(".board");
+  for (i = 0; (div00 = divBoard[i]); i++) {
+    div00.parentNode.removeChild(div00);
+  }
+
+  tableGame(saveArray[saveArray.length - 1]);
+  for (i = 1; i < saveArray.length - 1; i++) {
+    if (saveArray[i] != undefined) {
+      document.getElementById(i).className = "card";
+      document.getElementById(i).innerText = saveArray[i];
+    }
+  }
+  min = timerArray[0];
+  sec = timerArray[1];
+  mls = timerArray[2];
+  stopTimer = "run";
+  clock();
+}
+
+//Building the Board
+function tableGame(boardSize) {
+  let txt = "100px ".repeat(boardSize);
+  elemBoard = document.createElement("div");
+  elemBoard.id = "board";
+  elemBoard.className = "board";
+  elemBoard.style.height = boardSize * 100 + "px";
+  elemBoard.style.width = boardSize * 100 + "px";
+  elemBoard.style.gridTemplateColumns = txt;
+  board01.appendChild(elemBoard);
+
+  for (i = 1; i <= boardSize ** 2; i++) {
     elem = document.createElement("div");
     elem.className = "card hidden";
     elem.id = i;
-    board.appendChild(elem);
+    elemBoard.appendChild(elem);
     elem.onclick = click;
   }
 }
-//tableGame();
+let saveArray = [];
+//Marking X or O on game
 function click(e) {
+  stopTimer = "run";
+  clock();
   e.target.classList.remove("hidden");
   if (cnt % 2 == 0) {
+    $p2Name.classList.add("border");
+    $p1Name.classList.remove("border");
     e.target.innerText = "X";
     players[e.target.id] = "X";
     e.target.onclick = noClick;
-    if (cnt >= size * 2 - 2) {
-      check("X",playerX);
+    if (cnt >= boardSize * 2 - 2) {
+      check("X");
     }
   } else {
+    $p2Name.classList.remove("border");
+    $p1Name.classList.add("border");
+
     e.target.innerText = "O";
     players[e.target.id] = "O";
     e.target.onclick = noClick;
-    if (cnt >= size * 2 - 2) {
-      check("O",playerO);
+    if (cnt >= boardSize * 2 - 2) {
+      check("O");
     }
   }
   cnt++;
+  undo.push(e.target.id);
 }
+
 function noClick() {}
 
-startBtn.onclick = noClick;
-btn3.onclick = small;
-btn4.onclick = middle;
-btn5.onclick = biggest;
+function check(symbol, array = players) {
+  if (saveArray.length != 0) {
+    for (i in players) {
+      if (players != undefined) {
+        saveArray[i] = players[i];
+      }
+    }
+    array = saveArray;
+  }
 
-function small() {
-  board.classList.add("nine");
-  startBtn.onclick = clickToStart;
-  btn4.onclick = noClick;
-  btn5.onclick = noClick;
-  boardSize = 9;
-  size = 3;
-}
-
-function middle() {
-  board.classList.add("sixteen");
-  startBtn.onclick = clickToStart;
-  btn3.onclick = noClick;
-  btn5.onclick = noClick;
-  boardSize = 16;
-  size = 4;
-}
-
-function biggest() {
-  board.classList.add("twentyfive");
-  startBtn.onclick = clickToStart;
-  btn3.onclick = noClick;
-  btn4.onclick = noClick;
-  boardSize = 25;
-  size = 5;
-}
-
-function clickToStart() {
-  let hide = document.getElementById("before");
-  hide.classList.add("hidden");
-  cnt = 0;
-  tableGame(boardSize);
-}
-function startAgain() {
-  board.innerHTML = "";
-  let hide = document.getElementById("before");
-  hide.classList.remove("hidden");
-  board.classList.remove("twentyfive");
-  board.classList.remove("sixteen");
-  board.classList.remove("nine");
-  flagCnt = 0;
-  players = [];
-  startBtn.onclick = noClick;
-  btn3.onclick = small;
-  btn4.onclick = middle;
-  btn5.onclick = biggest;
-}
-
-//  // debugger
-//  let flag = false
-//  for(j=1;j<=3;j++){
-//      for (i = j; i <= 9; i+=3) {
-//          if (players[i]== symbol){
-//              flag = true
-//          }else{
-//              flag = false
-//          }
-//      }}
-//      for(j=1;j<=9;j+=3){
-//      for (i = j; i <= 3; i++) {
-//          if (players[i]== symbol){
-//              flag = true
-//          }else{
-//              flag = false
-//          }
-//      }}
-
-//      for (i = 1; i <= 9; i+=4) {
-//          if (players[i]== symbol){
-//              flag = true
-//          }else{
-//              flag = false
-//          }
-//      }
-//      for (i = 3; i <= 9; i+=2) {
-//          if (players[i]== symbol){
-//              flag = true
-//          }else{
-//              flag = false
-//          }
-//      }
-//      if(flag == true){
-//          alert(`${symbol} win`);
-//      }
-
-function check(symbol,name) {
   //Check Collumns
-  for (j = 1; j <= size; j++) {
-    for (i = j; i <= size ** 2; i += size) {
-      if (players[i] == symbol) {
+  for (j = 1; j <= boardSize; j++) {
+    for (i = j; i <= boardSize ** 2; i += boardSize) {
+      if (array[i] == symbol) {
         flagCnt++;
-        if (flagCnt == size) {
-          alert(`${name.value} win`);
-          startAgain();
-          return;
+        if (flagCnt == boardSize) {
+
+          winner(symbol);
         }
       } else {
         flagCnt = 0;
@@ -208,13 +245,13 @@ function check(symbol,name) {
   }
 
   //Check Lines
-  for (j = 1, x = 1; j <= size ** 2; j += size, x++) {
-    for (i = j; i <= size * x; i++) {
-      if (players[i] == symbol) {
+  for (j = 1, x = 1; j <= boardSize ** 2; j += boardSize, x++) {
+    for (i = j; i <= boardSize * x; i++) {
+      if (array[i] == symbol) {
         flagCnt++;
-        if (flagCnt == size) {
-          alert(`${name.value} win`);
-          startAgain();
+        if (flagCnt == boardSize) {
+
+          winner(symbol);
           return;
         }
       } else {
@@ -224,12 +261,11 @@ function check(symbol,name) {
     }
   }
   //Check \
-  for (i = 1; i <= size ** 2; i += size + 1) {
-    if (players[i] == symbol) {
+  for (i = 1; i <= boardSize ** 2; i += boardSize + 1) {
+    if (array[i] == symbol) {
       flagCnt++;
-      if (flagCnt == size) {
-        alert(`${name.value} win`);
-        startAgain();
+      if (flagCnt == boardSize) {
+        winner(symbol);
         return;
       }
     } else {
@@ -238,12 +274,11 @@ function check(symbol,name) {
     }
   }
   //Check /
-  for (i = size; i < size ** 2; i += size - 1) {
-    if (players[i] == symbol) {
+  for (i = boardSize; i < boardSize ** 2; i += boardSize - 1) {
+    if (array[i] == symbol) {
       flagCnt++;
-      if (flagCnt == size) {
-        alert(`${name.value} win`);
-        startAgain();
+      if (flagCnt == boardSize) {
+        winner(symbol);
         return;
       }
     } else {
@@ -253,8 +288,78 @@ function check(symbol,name) {
   }
 
   //No Winner
-  if (cnt == size ** 2 - 1 && flagCnt != size) {
+  if (cnt == boardSize ** 2 - 1 && flagCnt != boardSize) {
     alert("tako");
-    startAgain();
   }
+}
+
+function timerRecord() {
+  if (cnt < 9) {
+    cnt++;
+  }
+  movesScore.push(cnt);
+
+  Timescore.push($timer.innerText);
+  $recordCnt.innerText = `moves: ${movesScore.sort()[0]}`;
+
+  $recordTime.innerText = `time: ${Timescore.sort()[0]}`;
+}
+
+function winner(symbol) {
+  stopTimer = "stop";
+  timerRecord();
+  for (i = 1; i < boardSize ** 2 + 1; i++) {
+    document.getElementById(i).onclick = noClick;
+  }
+  if (symbol == "X") {
+    ++pointsX;
+    $p1Name.innerText = `${$ipt1.value} : ${pointsX}`;
+    $p1Name.classList.add("border");
+    $p2Name.classList.remove("border");
+    if ($ipt1.value == "") {
+      $p1Name.innerText = `Player 1 : ${pointsX}`;
+    }
+    alert(`${$ipt1.value} won`);
+  } else {
+    ++pointsO;
+    $p2Name.innerText = `${$ipt2.value} : ${pointsO}`;
+    $p1Name.classList.remove("border");
+    $p2Name.classList.add("border");
+    if ($ipt2.value == "") {
+      $p2Name.innerText = `Player 2 : ${pointsO}`;
+    }
+    alert(`${$ipt2.value} won`);
+  }
+  return;
+}
+
+let mls = 0,
+  sec = 0,
+  min = 0,
+  hh = 0;
+function clock() {
+  if (stopTimer == "stop") {
+    return;
+  }
+  if (mls < 100) {
+    mls++;
+  }
+  if (mls == 100) {
+    sec++;
+    mls = 0;
+  }
+  if (sec == 60) {
+    min++;
+    sec = 0;
+  }
+  if (min < 10 && sec < 10 && mls < 10) {
+    $timer.innerHTML = `0${min}:0${sec}:0${mls}`;
+  } else if (min < 10 && sec < 10) {
+    $timer.innerHTML = `0${min}:0${sec}:${mls}`;
+  } else if (min < 10) {
+    $timer.innerText = `0${min}:${sec}:${mls}`;
+  } else {
+    $timer.innerHTML = `${min}:${sec}:${mls}`;
+  }
+  setTimeout("clock()", 10);
 }

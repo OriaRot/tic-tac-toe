@@ -4,58 +4,41 @@ body {
   -webkit-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  background-color: #001e6c;
 }
 
+#body02 {
+  display: grid;
+  grid-template-columns: 70vw 30vw;
+}
+
+#section02{
+  border-left: 2px solid black;
+  height: 100vh;
+}
+
+
 .board {
-  width: 300px;
-  height: 300px;
   justify-content: center;
   border: 2px;
-}
-.nine{
-    display: grid;
-  grid-template-columns: repeat(3, 100px);
-}
-.sixteen{
-    display: grid;
-    grid-template-columns: repeat(4, 100px);
-}
-.twentyfive{
-    display: grid;
-    grid-template-columns: repeat(5, 100px);
+  display: grid;
 }
 
 .card {
   height: 100px;
-  background-color: #035397;
+  background-color: aqua;
   border: 2px black solid;
   font-size: 5rem;
   text-align: center;
-  color: #fcd900;
 }
 
 .hidden {
   content-visibility: hidden;
 }
 
-.ipt {
-  font-size: 1.4rem;
-  background-color: #e8630a;
-  color: #fcd900;
-}
-.btn {
-  background-color: #e8630a;
-  cursor: pointer;
-  margin-left: 10px;
-  text-align: center;
-  font-size: 30px;
-}
-.before {
-    color: #fcd900;
-    font-size: 2rem;
+#board01{
+  height: 500px;
 }
 
-.start{
-    margin-top: 30px;
+.border{
+  border: 2px solid rgb(255, 0, 0);
 }

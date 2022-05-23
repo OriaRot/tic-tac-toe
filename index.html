@@ -1,34 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Tic Toc Toe Game</title>
+
+    <link rel="stylesheet" href="TicTocToe02.css">
+</head>
+
+<body>
+
     <center>
-      <div class="before" id="before">
-        <p>player 1 name:</p>
-        <br />
-        <input id="ipt" class="ipt" type="text" /><br />
-        <p>player 2 name:</p>
-        <br />
-        <input id="ipt2" class="ipt" type="text" /><br />
-        <div>
-          <p><b>choose difficulty level</b></p>
-          <button id="btn3" class="btn">normal</button>
-          <button id="btn4" class="btn">hard</button>
-          <button id="btn5" class="btn">extrme</button>
+        <div id="body02">
+            <div id="section01">
+                <h1>Tic Toc Toe</h1>
+                <div id="board01">
+                </div>
+                <div class="timer">
+                    <h1 id="timer">00:00:00</h1>
+                </div>
+            </div>
+            <div id="section02">
+                <h3>Player 1 name:</h3>
+                <input id="ipt1" type="text" placeholder="Player 1"><br>
+                <h3>Player 2 name:</h3>
+                <input id="ipt2" type="text" placeholder="Player 2"><br>
+                <div>
+                    <h2>Choose Board Size</h2>
+                     <input type="radio" id="bs3" name="boardSize" value=3 onclick="boardSizeFun(this)">
+                     <label for="bs3">3</label><br>
+                     <input type="radio" id="bs4" name="boardSize" value=4 onclick="boardSizeFun(this)">
+                     <label for="bs4">4</label><br>
+                     <input type="radio" id="bs5" name="boardSize" value=5 onclick="boardSizeFun(this)">
+                     <label for="bs5">5</label>
+                   
+                </div> <br>
+                <button type="submit" id="startGame">Start</button>
+                <button type="submit" id="newGame">New Game</button>
+                <button type="submit" id="stopGame">Stop Game</button><br>
+                <button type="submit" id="undoPlay">Undo Play</button>
+                <button type="submit" id="saveGame">Save Game</button>
+                <button type="submit" id="loadGame">Load Game</button>
+                <button type="submit" id="clearPlayers">Clear Players</button>
+
+                <div>
+                    <h2>Player Board</h2>
+                    <span id="p1Name" class="play"></span> <b>VS</b>  <span id="p2Name" class="play"></span>
+                </div>
+
+                
+                    <h1>High-Scores</h1>
+                    <h1 id="recordTime">time: 00:00:00</h1>
+                    <h1 id="recordCnt">moves: 0</h1>
+                </div>
+            </div>
         </div>
-        <button id="btn" class="btn start">start</button>
-      </div>
-    </center>
-    <center>
-      <div id="board" class="board"></div>
     </center>
 
-    <script src="index.js"></script>
-  </body>
+
+    <script src="TicTocToe02.js"></script>
+</body>
+
 </html>
